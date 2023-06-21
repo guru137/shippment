@@ -5,7 +5,7 @@ FROM adoptopenjdk:8-jre-hotspot
 WORKDIR /app
 
 # Copy the executable JAR file into the container
-COPY target/Application-0.0.1-SNAPSHOT.jar Application-0.0.1-SNAPSHOT.jar
+COPY  --from=build /target/Application-0.0.1-SNAPSHOT.jar Application.jar
 
 # Expose the port your application will listen on
 EXPOSE 8090
@@ -16,6 +16,8 @@ ENV DB_PORT=5432
 ENV DB_NAME=postgres
 ENV DB_USERNAME=postgres
 ENV DB_PASSWORD=root
+
+ENTRYPOINT ["java","-jar","Application.jar"]
 
 # Wait for the database to be ready before starting the application
 CMD ["sh", "-c", "while ! nc -z localhost 5432; do sleep 1; done; java -jar Application-0.0.1-SNAPSHOT.jar"]
